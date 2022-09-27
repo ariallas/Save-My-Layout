@@ -16,11 +16,13 @@ private:
 	WINDOWPLACEMENT windowPlacement;
 	WINDOWINFO windowInfo;
 	HWND hwnd;
+	bool isCloaked;
 
 	bool retrieveWindowTitle();
 	bool retrieveWindowPlacement();
 	bool retrieveWindowInfo();
 	bool retrieveWindowModuleFileName();
+	bool retrieveWindowAttributes();
 
 	void showLastWinapiError();
 	void showWinapiError(DWORD errorCode);

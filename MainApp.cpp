@@ -24,7 +24,6 @@ MainApp::~MainApp() {
 
 bool MainApp::saveWindows() {
 	BOOL success = EnumWindows(enumWindowsProc, reinterpret_cast<LPARAM>(&windows));
-
 	return true;
 }
 

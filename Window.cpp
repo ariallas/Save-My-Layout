@@ -4,7 +4,9 @@
 #include <iostream>
 #include <dwmapi.h>
 #include <psapi.h>
+#include <fcntl.h>
 
+#pragma comment (lib, "dwmapi.lib")
 using namespace std;
 
 Window::Window(HWND hwnd) : hwnd(hwnd) {
@@ -21,10 +23,13 @@ void Window::init() {
 	retrieveWindowPlacement();
 	retrieveWindowInfo();
 	retrieveWindowModuleFileName();
+	retrieveWindowAttributes();
 }
 
 bool Window::isApplicable() {
-	return title.length() != 0;
+	bool negatives = isCloaked || (windowInfo.dwExStyle & WS_EX_TOOLWINDOW);
+	bool positives = IsWindowVisible(hwnd) && title.length() && moduleName.length();
+	return !negatives && positives;
 }
 
 bool Window::retrieveWindowTitle() {
@@ -71,6 +76,14 @@ bool Window::retrieveWindowModuleFileName() {
 		return false;
 	}
 	moduleName = buffer;
+	return true;
+}
+
+bool Window::retrieveWindowAttributes() {
+	BOOL bIsCloaked = FALSE;
+	// Returns COM error code if fails
+	DwmGetWindowAttribute(hwnd, DWMWA_CLOAKED, &bIsCloaked, sizeof(BOOL));
+	isCloaked = bIsCloaked;
 	return true;
 }
 
