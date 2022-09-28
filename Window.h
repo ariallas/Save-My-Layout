@@ -10,6 +10,10 @@ public:
 
 	void init();
 	bool isApplicable();
+	bool isDocked();
+	bool isRestored();
+
+	bool restoreWindowPlacement();
 
 	std::wstring title, moduleName;
 private:

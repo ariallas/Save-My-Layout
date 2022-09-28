@@ -10,6 +10,7 @@ public:
 
 	void run();
 	bool saveWindows();
+	bool restoreWindows();
 private:
 	std::vector<Window> windows;
 };

@@ -23,7 +23,14 @@ MainApp::~MainApp() {
 }
 
 bool MainApp::saveWindows() {
-	BOOL success = EnumWindows(enumWindowsProc, reinterpret_cast<LPARAM>(&windows));
+	EnumWindows(enumWindowsProc, reinterpret_cast<LPARAM>(&windows));
+	return true;
+}
+
+bool MainApp::restoreWindows() {
+	for (Window& window : windows) {
+		window.restoreWindowPlacement();
+	}
 	return true;
 }
 
@@ -31,11 +38,21 @@ void MainApp::run() {
 	// Set console output to wide char mode
 	int res = _setmode(_fileno(stdout), _O_U16TEXT);
 
+	wcout << L"Press any button to save window layout" << endl;
+	system("pause");
 	saveWindows();
 	for (Window& window : windows) {
 		wcout << window.title << endl;
 		wcout << window.moduleName << endl;
 		wcout << L"..................................." << endl;
 	}
+
+	while (true) {
+		wcout << L"Press any button to restore window layout" << endl;
+		system("pause");
+		restoreWindows();
+		wcout << L"..................................." << endl;
+	}
+
 	wcout << L"App done." << endl;
 }

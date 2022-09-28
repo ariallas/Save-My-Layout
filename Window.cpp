@@ -32,6 +32,39 @@ bool Window::isApplicable() {
 	return !negatives && positives;
 }
 
+bool Window::isDocked()
+{
+	if (!isRestored())
+		return false;
+	RECT r1 = windowInfo.rcWindow, r2 = windowPlacement.rcNormalPosition;
+	return !( (r1.right - r1.left) == (r2.right - r2.left) &&
+		      (r1.bottom - r1.top) == (r2.bottom - r2.top) );
+}
+
+bool Window::isRestored()
+{
+	UINT cmd = windowPlacement.showCmd;
+	return cmd != SW_MAXIMIZE && cmd != SW_MINIMIZE;
+}
+
+bool Window::restoreWindowPlacement() {
+	if (!isDocked()) {
+		if (!SetWindowPlacement(hwnd, &windowPlacement)) {
+			showLastWinapiError();
+			return false;
+		}
+	}
+
+	RECT r = windowInfo.rcWindow;
+	int cx = r.right - r.left, cy = r.bottom - r.top;
+	if (!SetWindowPos(hwnd, NULL, r.left, r.top, cx, cy, SWP_NOZORDER)) {
+		showLastWinapiError();
+		return false;
+	}
+
+	return true;
+}
+
 bool Window::retrieveWindowTitle() {
 	int titleLength = GetWindowTextLength(hwnd);
 	WCHAR* buffer;
