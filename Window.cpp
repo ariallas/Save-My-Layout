@@ -44,7 +44,7 @@ bool Window::isDocked()
 bool Window::isRestored()
 {
 	UINT cmd = windowPlacement.showCmd;
-	return cmd != SW_MAXIMIZE && cmd != SW_MINIMIZE;
+	return cmd != SW_SHOWMAXIMIZED && cmd != SW_SHOWMINIMIZED && cmd != SW_MINIMIZE;
 }
 
 bool Window::restoreWindowPlacement() {
