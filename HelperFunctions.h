@@ -2,4 +2,4 @@
 #include <Windows.h>
 #include "Exceptions.h"
 
-void Win32Check(BOOL result);
+void win32Check(BOOL success);

@@ -28,7 +28,7 @@ private:
 	bool retrieveWindowModuleFileName();
 	bool retrieveWindowAttributes();
 
-	void showLastWinapiError();
-	void showWinapiError(DWORD errorCode);
-	void showError(std::wstring error);
+	//void showLastWinapiError();
+	//void showWinapiError(DWORD errorCode);
+	//void showError(std::wstring error);
 };

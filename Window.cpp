@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "HelperFunctions.h"
 #include <Windows.h>
 #include <string>
 #include <iostream>
@@ -49,18 +50,12 @@ bool Window::isRestored()
 
 bool Window::restoreWindowPlacement() {
 	if (!isDocked()) {
-		if (!SetWindowPlacement(hwnd, &windowPlacement)) {
-			showLastWinapiError();
-			return false;
-		}
+		win32Check(SetWindowPlacement(hwnd, &windowPlacement));
 	}
 
 	RECT r = windowInfo.rcWindow;
 	int cx = r.right - r.left, cy = r.bottom - r.top;
-	if (!SetWindowPos(hwnd, NULL, r.left, r.top, cx, cy, SWP_NOZORDER)) {
-		showLastWinapiError();
-		return false;
-	}
+	win32Check(SetWindowPos(hwnd, NULL, r.left, r.top, cx, cy, SWP_NOZORDER));
 
 	return true;
 }
@@ -77,37 +72,25 @@ bool Window::retrieveWindowTitle() {
 
 bool Window::retrieveWindowPlacement() {
 	windowPlacement.length = sizeof(WINDOWPLACEMENT);
-	if (!GetWindowPlacement(hwnd, &windowPlacement)) {
-		showLastWinapiError();
-		return false;
-	}
+	win32Check(GetWindowPlacement(hwnd, &windowPlacement));
 	return true;
 }
 
 bool Window::retrieveWindowInfo() {
 	windowInfo.cbSize = sizeof(WINDOWINFO);
-	if (!GetWindowInfo(hwnd, &windowInfo)) {
-		showLastWinapiError();
-		return false;
-	}
+	win32Check(GetWindowInfo(hwnd, &windowInfo));
 	return true;
 }
 
 bool Window::retrieveWindowModuleFileName() {
 	DWORD dwPID;
 	GetWindowThreadProcessId(hwnd, &dwPID);
+	// Returns 5 (ERROR_ACCESS_DENIED) if process is ran as admin
 	HANDLE handle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, dwPID);
-	if (!handle) {
-		// Returns 5 (ERROR_ACCESS_DENIED) if process is ran as admin
-		// showLastWinapiError();
-		return false;
-	}
+	win32Check((BOOL)handle);
 	WCHAR buffer[MAX_PATH];
 	//if (GetProcessImageFileName(handle, buffer, MAX_PATH))
-	if (!GetModuleFileNameEx(handle, NULL, buffer, MAX_PATH)) {
-		showLastWinapiError();
-		return false;
-	}
+	win32Check(GetModuleFileNameEx(handle, NULL, buffer, MAX_PATH));
 	moduleName = buffer;
 	return true;
 }
@@ -120,16 +103,16 @@ bool Window::retrieveWindowAttributes() {
 	return true;
 }
 
-void Window::showLastWinapiError() {
-	showWinapiError(GetLastError());
-}
-
-void Window::showWinapiError(DWORD errorCode) {
-	wstring error = to_wstring(errorCode);
-	error = L"Win API error code: " + error;
-	showError(error);
-}
-
-void Window::showError(wstring error) {
-	wcout << error << endl;
-}
+//void Window::showLastWinapiError() {
+//	showWinapiError(GetLastError());
+//}
+//
+//void Window::showWinapiError(DWORD errorCode) {
+//	wstring error = to_wstring(errorCode);
+//	error = L"Win API error code: " + error;
+//	showError(error);
+//}
+//
+//void Window::showError(wstring error) {
+//	wcout << error << endl;
+//}

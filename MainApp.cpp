@@ -9,7 +9,14 @@ BOOL CALLBACK enumWindowsProc(__in HWND hwnd, __in LPARAM lParam) {
 	vector<Window>& windows = *reinterpret_cast<vector<Window>*>(lParam);
 
 	Window window(hwnd);
-	window.init();
+	try {
+		window.init();
+	}
+	catch (const win32_runtime_error& exc) {
+		if (exc.errorCode != 5)
+			wcout << exc.message;
+		return TRUE;
+	}
 	if (window.isApplicable())
 		windows.push_back(window);
 

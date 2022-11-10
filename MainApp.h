@@ -1,5 +1,6 @@
 #pragma once
 #include "Window.h"
+#include "Exceptions.h"
 #include <vector>
 
 class MainApp
