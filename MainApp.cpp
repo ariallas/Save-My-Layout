@@ -42,9 +42,7 @@ void MainApp::run() {
 	system("pause");
 	saveWindows();
 	for (Window& window : windows) {
-		wcout << window.title << endl;
-		wcout << window.moduleName << endl;
-		wcout << L"..................................." << endl;
+		wcout << window.title << " (" << window.moduleName << ')' << endl;
 	}
 
 	while (true) {

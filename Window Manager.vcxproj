@@ -130,9 +130,11 @@
     <ClCompile Include="HelperFunctions.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainApp.cpp" />
+    <ClCompile Include="Exceptions.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Exceptions.h" />
     <ClInclude Include="HelperFunctions.h" />
     <ClInclude Include="MainApp.h" />
     <ClInclude Include="Window.h" />

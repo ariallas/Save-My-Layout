@@ -2,11 +2,11 @@
 #include <stdexcept>
 #include <string>
 
-std::string win32ErrorToString(DWORD errorCode) {
-
+std::wstring win32ErrorToString(DWORD errorCode) {
+	return L"123";
 }
 
 void win32Check(BOOL success) {
 	if (!success)
-		throw std::runtime_error(win32ErrorToString(GetLastError()));
+		throw win32_runtime_error(win32ErrorToString(GetLastError()));
 }
